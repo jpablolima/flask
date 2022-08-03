@@ -8,6 +8,9 @@ class Jogo:
         self.categoria=categoria
         self.console=console
 
+@app.route('/home')
+def home():
+    return render_template("index.html", titulo="Games")
 
 @app.route("/jogos")
 def jogos():
@@ -20,6 +23,9 @@ def jogos():
     return render_template("jogos.html", titulo="Jogos", litaJogos=jogos)
 
 
+@app.route("/novojogo")
+def novojogo():
+    return render_template('novojogo.html', titulo="Novo Jogo")
 
 
 
