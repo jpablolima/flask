@@ -1,6 +1,6 @@
 from crypt import methods
 import re
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 
 app = Flask(__name__)
 
@@ -36,7 +36,7 @@ def criarjogo():
     jogo = Jogo(nome, categoria, console)
     lista.append(jogo)
 
-    return render_template("jogos.html", titulo="Jogos", listaJogos=lista)
+    return redirect("/jogos")
 
 
 
