@@ -40,4 +40,5 @@ def criarjogo():
 
 
 
+
 app.run(debug=True)
