@@ -1,8 +1,10 @@
 from crypt import methods
+from curses import flash
 import re
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session, flash
 
 app = Flask(__name__)
+app.secret_key='gandalf'
 
 class Jogo:
     def __init__(self, nome, categoria, console):
@@ -47,8 +49,11 @@ def login():
 @app.route('/autenticar', methods=['POST'])
 def autenticar():
     if 'bazinga' == request.form['senha']:
+        session['usuario_logado'] = request.form['usuario']
+        flash(session['usuario_logado'] + 'logado com sucesso!')
         return redirect('/jogos')
     else:
+        flash('Erro no login!')
         return redirect('/login')
 
 
