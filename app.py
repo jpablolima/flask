@@ -1,7 +1,7 @@
 from crypt import methods
 from curses import flash
 import re
-from flask import Flask, render_template, request, redirect, session, flash
+from flask import Flask, render_template, request, redirect, session, flash, url_for
 
 app = Flask(__name__)
 app.secret_key = 'gandalf'
@@ -33,7 +33,9 @@ def jogos():
 @app.route("/novojogo")
 def novojogo():
     if 'usuario_logado' not in session or session['usuario_logado'] == None:
-        return redirect('/login?proxima=novo')
+        return redirect('/login')
+
+        # return redirect(url_for('login', proxima=url_for('novojogo')))
     return render_template('novojogo.html', titulo="Novo Jogo")
 
 
@@ -44,32 +46,33 @@ def criarjogo():
     console = request.form['console']
     jogo = Jogo(nome, categoria, console)
     lista.append(jogo)
-
-    return redirect("/jogos")
+    return redirect(url_for('jogos'))
 
 
 @app.route('/login')
 def login():
-    proxima = request.args.get('proxima')
-    return render_template('login.html', proxima=proxima)
+    # proxima = request.args.get('proxima')
+    return render_template('login.html')
 
 
-@app.route('/autenticar', methods=['POST'])
+
+@app.route('/autenticar', methods['POST'])
 def autenticar():
     if 'bazinga' == request.form['senha']:
-        session['usuario_logado'] = request.form['usuario']
-        flash(session['usuario_logado'] + ' logado com sucesso!')
-        proxima_pagina = request.form['proxima']
-        return redirect('/jogos{}'.format(proxima_pagina))
-        # return redirect('/jogos')
+        session['usuario_logado'] = request.form['usuarios']
+        flash(session['usuario_logado']  + 'com sucesso!')
+        return redirect('/')
     else:
-        flash('Erro no login!')
-        return redirect('/login')
+        flash('Usuário não logado!')
+        return redirect('jogos.html')
+
+
+
 @app.route('/logout')
 def logout():
     session['usuario_logado'] = None
     flash('Logout efetuado com sucesso!')
-    return redirect('/home')
+    return redirect('/login.html')
 
 
 app.run(debug=True)
