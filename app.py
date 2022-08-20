@@ -1,5 +1,6 @@
 from crypt import methods
-from flask import Flask, render_template, request, redirect
+from curses import flash
+from flask import Flask, render_template, request, redirect, session, flash
 
 class Jogo:
     def __init__(self, nome, categoria, console):
@@ -14,6 +15,7 @@ lista = [jogo1, jogo2, jogo3]
 
 
 app = Flask(__name__)
+app.secret_key = 'games'
 
 
 @app.route('/')
@@ -46,8 +48,11 @@ def login():
 @app.route('/autenticar', methods=['POST'])
 def autenticar():
     if 'bazinga' == request.form['senha']:
+        session['usuario_logado'] = request.form['usuario']
+        flash(session['usuario_logado'] + 'com sucesso!')
         return redirect('/jogos')
     else:
+        flash('Erro no login, verifique usuário e senha !')
         return redirect('/login')
 
 app.run(debug=True)
