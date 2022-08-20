@@ -8,6 +8,24 @@ class Jogo:
         self.categoria=categoria
         self.console=console
 
+class Usuario:
+    def __init__(self, nome, nickname, senha):
+        self.nome = nome
+        self.nickname = nickname
+        self.senha = senha
+
+usuario1 = Usuario('João Pablo', 'jpablo','bazinga')
+usuario2 = Usuario('Goku','goku', 'goku')
+usuario3 = Usuario('Batman', 'batman', 'batman')
+usuario4 = Usuario('Vegeta','vageta','vageta')
+        
+usuarios = { usuario1.nickname : usuario1, 
+             usuario2.nickname : usuario2, 
+             usuario3.nickname : usuario3,
+             usuario4.nickname : usuario4
+            }
+
+
 jogo1 = Jogo('God of War','Hack n slash', 'PS5')
 jogo2 = Jogo('Skyrim','RPG', 'PC')
 jogo3 = Jogo('PES','Esporte', 'PS2')
@@ -50,11 +68,14 @@ def login():
 
 @app.route('/autenticar', methods=['POST'])
 def autenticar():
-    if 'bazinga' == request.form['senha']:
-        session['usuario_logado'] = request.form['usuario']
-        flash(session['usuario_logado'] + ' logado com sucesso!')
-        proxima_pagina = request.form['proxima']
-        return redirect(proxima_pagina)
+    if request.form['usuario'] in usuarios:
+        usuario = usuarios[request.form['usuario']]
+        if request.form['senha'] == usuario.senha:
+            session['usuario_logado'] = usuario.nickname
+            flash(usuario.nickname + ' logado com sucesso!')
+            proxima_pagina = request.form['proxima']
+            return redirect(proxima_pagina)
+
     else:
         flash('Erro no login, verifique usuário e senha !')
         return redirect('/login')
