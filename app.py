@@ -39,4 +39,15 @@ def criar():
     lista.append(jogo)
     return redirect('/jogos')
 
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+@app.route('/autenticar', methods=['POST'])
+def autenticar():
+    if 'bazinga' == request.form['senha']:
+        return redirect('/jogos')
+    else:
+        return redirect('/login')
+
 app.run(debug=True)
